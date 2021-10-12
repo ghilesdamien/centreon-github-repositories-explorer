@@ -1,0 +1,21 @@
+node {
+    stage('Build') {
+        cleanWs()
+        // Building the RPM file
+        dir('build') {
+            // Using a specific docker image to build RPM file
+            docker.image('ghcr.io/ghilesdamien/rpmbuilder:latest').inside {
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: "$git_repo"]]])
+                sh "cp -R centreon-github-repositories-explorer/* /home/rpmbuilder/rpmbuild && rpmbuild -ba /home/rpmbuilder/rpmbuild/SPECS/$spec_file && cp -R /home/rpmbuilder/rpmbuild/RPMS ."
+            }
+            // Checking if the build is successful
+            def rpmsFolderContent = sh(script: "ls $WORKSPACE/build/RPMS", returnStdout: true).trim()
+            if (null == rpmsFolderContent || "".equals(rpmsFolderContent)) {
+                currentBuild.result = 'FAILED'
+                    error("An error occured during build.")
+            } else {
+                println("The RPM file is available in the job workspace $WORKSPACE/build/RPMS or ${BUILD_URL}execution/node/3/ws/build/RPMS")
+            }
+        }
+    }
+}

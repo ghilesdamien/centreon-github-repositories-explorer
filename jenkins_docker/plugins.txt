@@ -1,0 +1,10 @@
+git:latest
+pipeline-github-lib:latest
+pipeline-stage-view:latest
+configuration-as-code:latest
+docker-workflow:latest
+workflow-aggregator:latest
+matrix-auth:latest
+credentials-binding:latest
+authorize-project:latest
+ws-cleanup:latest

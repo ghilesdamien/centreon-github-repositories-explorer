@@ -1,0 +1,1 @@
+docker run --name jenkins-casc --rm --group-add $(stat -c '%g' /var/run/docker.sock) -v /var/run/docker.sock:/var/run/docker.sock -p 8083:8080 --env JENKINS_ADMIN_ID=admin --env JENKINS_ADMIN_PASSWORD=centreon --env JENKINS_ADMIN_URL="http://192.168.1.10:8083/" jenkins_docker_casc
