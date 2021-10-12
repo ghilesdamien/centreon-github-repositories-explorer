@@ -29,6 +29,7 @@ N’hésitez pas à commenter ou documenter votre travail.
 ## Avant propos
 * J'ai fait le choix pour ce test d'utiliser un dépot git et docker registry publics pour ne pas m'encombrer de notion d'authentification et faciliter le partage, ce ne serait pas le cas dans un contexte de production.
 * J'ai aussi fait le choix de mettre en configuration l'archive utilisée comme source pour le RPM, vu que le nom de cette archive est lié au fichier spec fourni, ce n'est pas au job jenkins qui fait le build d'archiver les sources. Cependant dans un contexte de production, on pourrait créer un script ou un job jenkins qui génère le fichier de spec et l'archive.
+* J'ai fait une première version 0.0.1 du script pour récupérer les dépots GitHub de façon brute, puis une 0.0.2 avec un affichage amélioré.
 ## Livrables
 * le code du script shell : [centreon-github-repositories-explorer/SOURCES/centreon-github-repositories-explorer-0.0.1/centreon-github-repositories-explorer.sh](https://github.com/ghilesdamien/centreon-technical-test/blob/main/centreon-github-repositories-explorer/SOURCES/centreon-github-repositories-explorer-0.0.1/centreon-github-repositories-explorer.sh)
 * le code de spec RPM : [centreon-github-repositories-explorer/SPECS/centreon-github-repositories-explorer.spec](https://github.com/ghilesdamien/centreon-technical-test/blob/main/centreon-github-repositories-explorer/SPECS/centreon-github-repositories-explorer.spec)
@@ -41,12 +42,12 @@ N’hésitez pas à commenter ou documenter votre travail.
     * Une variable d'environnement SPEC_FILE contenant le nom du fichier de spécification
     * Eventuellement un volume liant le dossier qui contiendra le résultat de la construction vers le dossier /home/rpmbuilder/rpmbuild/RPMS du container (le dossier doit être créé avec le bon utilisateur auparavant)
   * Exemple de lancement :
-    * `docker run -it --rm -v $(pwd)/SPECS:/home/rpmbuilder/rpmbuild/SPECS -v $(pwd)/SOURCES:/home/rpmbuilder/rpmbuild/SOURCES -v $(pwd)/RPMS:/home/rpmbuilder/rpmbuild/RPMS --env SPEC_FILE=centreon-github-repositories-explorer.spec ghcr.io/ghilesdamien/rpmbuilder:latest`
+    * `docker run -it --rm -v $(pwd)/SPECS:/home/rpmbuilder/rpmbuild/SPECS -v $(pwd)/SOURCES:/home/rpmbuilder/rpmbuild/SOURCES -v $(pwd)/RPMS:/home/rpmbuilder/rpmbuild/RPMS --env SPEC_FILE=centreon-github-repositories-explorer-0.0.2.spec ghcr.io/ghilesdamien/rpmbuilder:latest`
   * Le résultat de la construction se trouvera dans le dossier -v $(pwd)/RPMS
 * le Jenkinsfile qui décrit la pipeline : [jenkins/Jenkinsfile](https://github.com/ghilesdamien/centreon-technical-test/blob/main/jenkins/Jenkinsfile)
   * J'ai essayé de faire une pipeline la plus générique possible pour construire un RPM à partir de n'importe quel dépot git public.
   * Nécessite 4 paramètres :
-    * spec_file : le nom du fichier de spécification se trouvant dans le dossier SPECS (centreon-github-repositories-explorer.spec)
+    * spec_file : le nom du fichier de spécification se trouvant dans le dossier SPECS (centreon-github-repositories-explorer-0.0.2.spec)
     * git_repo :  l'url de dépot public git (https://github.com/ghilesdamien/centreon-technical-test)
     * sources_folder_path : le chemin vers le dossier du dépot git contenant les sources du RPM (centreon-github-repositories-explorer/SOURCES)
     * specs_folder_path : le chemin vers le dossier du dépot git contenant le fichier de spécification du RPM (centreon-github-repositories-explorer/SPECS)
