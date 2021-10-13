@@ -21,7 +21,8 @@ node {
             currentBuild.result = 'FAILED'
             error("An error occured during build.")
         } else {
-            println("The RPM file is available in the job workspace $WORKSPACE/build/RPMS or ${BUILD_URL}execution/node/3/ws/build/RPMS")
+            archiveArtifacts 'build/RPMS/**/*.rpm'
+            println("The RPM file is available in the job status page (Build Artifacts)")
         }
     }
 }

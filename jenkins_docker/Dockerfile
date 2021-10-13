@@ -19,5 +19,5 @@ RUN apt-get update && apt-get install -y docker-ce-cli
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 COPY casc.yaml /var/jenkins_home/casc.yaml
-COPY build_rpm /usr/share/jenkins/ref/jobs/
+COPY build_rpm /usr/share/jenkins/ref/jobs/build_rpm
 USER jenkins
